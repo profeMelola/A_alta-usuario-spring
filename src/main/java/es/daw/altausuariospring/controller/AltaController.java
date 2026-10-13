@@ -1,6 +1,8 @@
 package es.daw.altausuariospring.controller;
 
 import es.daw.altausuariospring.service.AltaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,8 @@ import java.util.List;
 
 @Controller
 public class AltaController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AltaController.class);
 
     // ----------------- INYECCIÓN DE DEPENDENCIAS POR PROPIEDAD ---------------------
     // NO LO VAMOS A UTILIZAR
@@ -40,19 +44,21 @@ public class AltaController {
     }
     // ----------------------------------------------------------
 
-    @GetMapping("/")
-    public String inicio() {
-        return "index";              // → templates/index.html
-    }
+//    @GetMapping("/")
+//    public String inicio() {
+//        return "index";              // → templates/index.html
+//    }
 
     @GetMapping("/alta")
     public String mostrarFormulario(Model model) {
         // 1. Añadir al modelo las listas de tecnologías y niveles
-        model.addAttribute("tecnologias",service.getNiveles());
-        model.addAttribute("listaNiveles",service.getTecnologias());
+        model.addAttribute("listaNiveles",service.getNiveles());
+        LOG.info("lista de niveles: "+service.getNiveles());
+        model.addAttribute("tecnologias",service.getTecnologias());
+        LOG.info("lista de tecnologias: "+service.getTecnologias());
 
         // 2. Devolver el nombre de la vista
-        return "formulario";
+        return "formulario"; // NO es un endpoint, es el nombre del template de thymeleaf
     }
 
     @PostMapping("/alta")
