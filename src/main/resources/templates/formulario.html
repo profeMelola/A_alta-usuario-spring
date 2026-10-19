@@ -33,7 +33,9 @@
             <!-- Pista: #lists.contains(lista, elemento) -->
             <option th:each="n : ${listaNiveles}"
                     th:value="${n}"
-                    th:text="${n}">Nivel</option>
+                    th:text="${n}"
+                    th:selected="${nivelesSeleccionados != null
+                    and #lists.contains(nivelesSeleccionados, n)}" >Nivel</option>
         </select>
 
         <button type="submit">Enviar</button>

@@ -53,9 +53,9 @@ public class AltaController {
     public String mostrarFormulario(Model model) {
         // 1. Añadir al modelo las listas de tecnologías y niveles
         model.addAttribute("listaNiveles",service.getNiveles());
-        LOG.info("lista de niveles: "+service.getNiveles());
+        LOG.info("lista de niveles: {} ",service.getNiveles());
         model.addAttribute("tecnologias",service.getTecnologias());
-        LOG.info("lista de tecnologias: "+service.getTecnologias());
+        LOG.info("lista de tecnologias: {} ",service.getTecnologias());
 
         // 2. Devolver el nombre de la vista
         return "formulario"; // NO es un endpoint, es el nombre del template de thymeleaf
@@ -64,11 +64,35 @@ public class AltaController {
     @PostMapping("/alta")
     public String procesarFormulario(@RequestParam String nombre,
                                      @RequestParam String email,
-                                     @RequestParam String tecnologia,
+                                     @RequestParam(name = "tecnologia") String tecno,
                                      @RequestParam(name = "nivel", required = false) List<String> niveles,
                                      Model model) {
-        // 1. Si nombre está vacío → mensajeError + datos introducidos + listas → "formulario"
-        // 2. Si no → datos al modelo → "confirmacion"
-        return "confirmacion";
+
+        // 1. RECOGER LOS VALORES.... ESO LO HACE AUTOMÁTICAMENTE SPRING CON @RequestParam
+
+        // 2. VALIDACIONES...Si nombre está vacío → mensajeError + datos introducidos + listas → "formulario"
+        if ( nombre.isBlank()){
+            model.addAttribute("mensajeError", "El nombre es obligatorio");
+
+            // Queremos mantener los datos que el usuario haya rellenado en el formulario...
+            model.addAttribute("listaNiveles",service.getNiveles());
+            model.addAttribute("tecnologias",service.getTecnologias()); // para cargar los options del desplegable
+            model.addAttribute("nombre", nombre);
+            model.addAttribute("email", email);
+            model.addAttribute("tecnologia",tecno); // lo usamos para hacer selected del único valor de la lista monoselección de tecnologías
+
+            model.addAttribute("nivelesSeleccionados",niveles); // lo usaremos para hacer selected de los options de la lista de niveles
+
+            return "formulario"; // nombre de la vista...
+
+        }
+
+        // 3. PASAMOS INFORMACIÓN A LA VIST. Si no → datos al modelo → "confirmacion"
+        model.addAttribute("nombre", nombre);
+        model.addAttribute("email", email);
+        model.addAttribute("tecnologia",tecno); // lo usamos para hacer selected del único valor de la lista monoselección de tecnologías
+
+        model.addAttribute("niveles",niveles);
+        return "confirmacion"; // FORWARD A LA VISTA
     }
 }

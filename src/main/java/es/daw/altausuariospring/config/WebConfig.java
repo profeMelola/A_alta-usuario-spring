@@ -16,6 +16,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/login").setViewName("login");
+        // Sobraría porque por defecto el home busca un index.html...
+        // Son endpoints sin lógica de negocio..
+        registry.addViewController("/").setViewName("index");
+
+
     }
 }
