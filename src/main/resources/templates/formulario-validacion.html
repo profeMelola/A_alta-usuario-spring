@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de alta</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="claro">
+<div class="form-card">
+    <h1>Formulario de alta</h1>
+
+    <!-- Solo se pinta si existe mensajeError -->
+    <!--    <div class="error-msg" th:if="${mensajeError}" th:text="${mensajeError}">Mensaje de error por defecto</div>-->
+
+
+    <!-- novalidate desactiva la validación del navegador (required, type="email"...) para que
+           los datos lleguen al servidor y veamos funcionar @Valid. En un proyecto real se quitaría:
+           lo normal es validar en los dos sitios (el navegador por comodidad, el servidor por seguridad). -->
+    <form th:action="@{/alta-validacion}" th:object="${usuario}" method="post" novalidate>
+
+        <label for="nombre">Nombre</label>
+<!--        <input type="text" id="nombre" name="nombre" th:value="${nombre}">-->
+        <input type="text" id="nombre" th:field="*{nombre}">
+        <div class="error-msg" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">error genérico</div>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" th:field="*{email}" required>
+        <div class="error-msg" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">error genérico</div>
+
+        <label for="tecnologia">Tecnología con la que más te gustaría trabajar</label>
+        <select id="tecnologia" th:field="*{tecnologia}">
+            <option th:each="t : ${tecnologias}"
+                    th:value="${t}"
+                    th:text="${t}">Tecnología</option>
+        </select>
+        <div class="error-msg" th:if="${#fields.hasErrors('tecnologia')}" th:errors="*{tecnologia}">error genérico</div>
+
+        <label for="nivel">Nivel (puedes marcar varios)</label>
+        <select id="nivel" th:field="*{niveles}" multiple>
+            <option th:each="n : ${listaNiveles}"
+                    th:value="${n}"
+                    th:text="${n}">Nivel</option>
+        </select>
+        <div class="error-msg" th:if="${#fields.hasErrors('niveles')}" th:errors="*{niveles}">error genérico</div>
+
+        <button type="submit">Enviar</button>
+    </form>
+</div>
+</body>
+</html>

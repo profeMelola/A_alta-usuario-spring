@@ -10,8 +10,11 @@
 <div class="card">
   <h1>¿Quieres darte de alta en la aplicación?</h1>
   <p>Regístrate en unos segundos y cuéntanos qué tecnología te interesa más.</p>
+
   <!-- Un enlace siempre es GET -> @GetMapping("/alta") -->
   <a class="boton" th:href="@{/alta}">Darme de alta</a>
+  <a class="boton" th:href="@{/alta-validacion}">Darme de alta (versión con dto y validaciones)</a>
+
 </div>
 </body>
 </html>
